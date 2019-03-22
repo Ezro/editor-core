@@ -1,9 +1,10 @@
 use crate::systems::*;
 use crate::types::IncomingComponent;
 use crate::types::*;
-use amethyst::core::{Result as BundleResult, SystemBundle};
+use amethyst::core::SystemBundle;
 use amethyst::ecs::{Component, DispatcherBuilder};
 use amethyst::shred::Resource;
+use amethyst::Error;
 use crossbeam_channel::Receiver;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -262,7 +263,7 @@ impl<'a> Default for SyncEditorBundle<'a> {
 }
 
 impl<'a, 'b, 'c> SystemBundle<'a, 'b> for SyncEditorBundle<'c> {
-    fn build(self, dispatcher: &mut DispatcherBuilder<'a, 'b>) -> BundleResult<()> {
+    fn build(self, dispatcher: &mut DispatcherBuilder<'a, 'b>) -> Result<(), Error> {
         let socket = UdpSocket::bind(self.bind_address).expect("Failed to bind socket");
         socket
             .set_nonblocking(true)
